@@ -35,3 +35,4 @@
         - [ ] Then:
             - [ ] Archie passes `{task}` to `npm run {task}`...
             - [ ] And also passes any arguments
+3. [ ] Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
