@@ -6,9 +6,13 @@
   "directories": {
     "test": "test"
   },
+  "bin": {
+    "archie": "./bin/archie.js"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "commander": "^2.9.0",
     "ejs": "^2.5.6",
     "es6-promise": "^4.1.0",
     "fs-extra": "^3.0.1",

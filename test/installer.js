@@ -18,16 +18,17 @@ var tempDir = '.temp';
 
 
 describe('archie', function () {
-	afterEach(function () {
-		// Clean up.
-		fs.removeSync(tempDir);
-	});
 
 	after(function () {
 		fs.removeSync('test-file.md');
 	});
 
 	describe('#install()', function () {
+		afterEach(function () {
+			// Clean up.
+			fs.removeSync(tempDir);
+		});
+
 		// Set up each test.
 		var tests = [{
 			// archie.install(src = '', dest = '', data = '');
@@ -69,7 +70,7 @@ describe('archie', function () {
 
 		// Run each test.
 		tests.forEach(function (test, i) {
-			it('should compile ' + test.src + ' to ' + (test.dest || '.'), function (done) {
+			it('should compile ' + test.src + ' to ' + (test.dest || '{cwd}'), function (done) {
 				// Run compiler.
 				archie.install(test.src, test.dest, test.data).then(function (files) {
 					// Expect files to be array of file objects.
@@ -91,6 +92,13 @@ describe('archie', function () {
 					});
 				}).then(done).catch(done);
 			});
+		});
+
+		it('should throw an error, since no files should be found', function () {
+			// No {src} argument should throw an error.
+			expect(archie.install).to.throw();
+			// Finding no source files should throw an error.
+			expect(archie.install.bind(archie, 'examples/no-exist')).to.throw();
 		});
 	});
 });

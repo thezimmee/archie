@@ -48,19 +48,21 @@ function installBlock(src, dest, data = 'archie.data.js') {
 	} catch(error) {}
 
 	// Get source file paths.
-	return getSourceFilepaths(src)
-		.then(function (filepaths) {
-			// Compile each file.
-			filepaths.forEach(function (src) {
-				// Do not compile `archie.block.js`
-				if (path.basename(src) === 'archie.block.js') {
-					return;
-				}
-				// Compile file.
-				promises.push(compileFile(src, dest, data));
-			});
-			return Promise.all(promises);
-		});
+	var filepaths = getSourceFilepaths(src);
+	if (!filepaths.length) {
+		throw new Error('No source files were found.');
+	}
+	// Compile each file.
+	filepaths.forEach(function (src) {
+		// Do not compile `archie.block.js`
+		if (path.basename(src) === 'archie.block.js') {
+			return;
+		}
+		// Compile file.
+		promises.push(compileFile(src, dest, data));
+	});
+	// Return promise which results in array of file objects.
+	return Promise.all(promises);
 }
 
 
@@ -85,7 +87,7 @@ function getData(dataPath) {
  */
 function getSourceFilepaths(src) {
 	var glob = require('globby');
-	return glob(src, {dot: true, nodir: true});
+	return glob.sync(src, {dot: true, nodir: true});
 }
 
 

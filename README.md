@@ -8,6 +8,8 @@
     - [x] `{dest}` is optional and defaults to `process.cwd()`.
     - [x] `{data}` is optional and defaults to `process.cwd()/archie.config.js`. If provided, it can either be a string path to a `.js` or `.json` data file or an actual object.
     - [x] Provide a way to compile vanilla JS to a JSON file (like package.json).
+    - [x] Run archie install from cli.
+    - [ ] Option to merge json to file if file doesn't exist. This is so files like package.json don't get overwritten completely.
 2. [ ] Feature: Archie the task master (`archie {cmd}`):
     - [ ] When `{cmd}` in `archie {cmd}` is anything but another predefined archie command, pass the command and all arguments to `npm run {task}`.
 3. [ ] Feature: Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
