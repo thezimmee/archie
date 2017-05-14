@@ -1,0 +1,32 @@
+{
+  "name": "archie",
+  "version": "0.0.1",
+  "description": "Archie the architect.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "ejs": "^2.5.6",
+    "es6-promise": "^4.1.0",
+    "fs-extra": "^3.0.1",
+    "glob-parent": "^3.1.0",
+    "globby": "^6.1.0",
+    "mocha": "^3.3.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thezimmee/archie.git"
+  },
+  "author": "The Zimmee <thezimmee@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thezimmee/archie/issues"
+  },
+  "homepage": "https://github.com/thezimmee/archie#readme"
+}
