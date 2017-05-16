@@ -16,10 +16,10 @@ var archie = module.exports = {
  *
  * @param src {string} File, directory, or glob source files.
  * @param dest {string} Destination directory.
- * @param data {string|object} Path to data file or actual data object.
+ * @param options {object} Options object.
  * @return {array} Array of file objects (see compileFile function).
  */
-function installBlock(src, dest, data = 'archie.data.js') {
+function installBlock(src, dest, options) {
 	var path = require('path');
 	var fs = require('fs-extra');
 	var glob = require('globby');
@@ -27,23 +27,26 @@ function installBlock(src, dest, data = 'archie.data.js') {
 	var promises = [];
 	var stats;
 
+	// Set options defaults.
+	options = Object.assign({data: 'archie.data.js'}, options);
+
 	// Grab archie data.
-	if (typeof data !== 'object') {
-		data = getData(data);
+	if (typeof options.data !== 'object') {
+		options.data = getData(options.data);
 	}
 
 	// Get true src path and base directory.
-	data._basePath = data._basePath || '';
+	options.basePath = options.basePath || '';
 	if (glob.hasMagic(src)) {
-		data._basePath = require('glob-parent')(src);
+		options.basePath = require('glob-parent')(src);
 	}
 	try {
 		stats = fs.statSync(src);
 		if (stats.isDirectory()) {
-			data._basePath = src;
+			options.basePath = src;
 			src = path.join(src, '**/*');
 		} else if (stats.isFile()) {
-			data._basePath = path.dirname(src);
+			options.basePath = path.dirname(src);
 		}
 	} catch(error) {}
 
@@ -59,7 +62,7 @@ function installBlock(src, dest, data = 'archie.data.js') {
 			return;
 		}
 		// Compile file.
-		promises.push(compileFile(src, dest, data));
+		promises.push(compileFile(src, dest, options));
 	});
 	// Return promise which results in array of file objects.
 	return Promise.all(promises);
@@ -95,11 +98,11 @@ function getSourceFilepaths(src) {
  * @brief Compiles a file with archie data.
  *
  * @param src {string} Source file path.
- * @param dest {string} Destination directory.
- * @param data {object} archie data object.
+ * @param dest {string} (optional) Destination directory. Defaults to cwd.
+ * @param options {object} Options object.
  * @return {object} {filepath: '{destination path}', content: '{file contents}'}
  */
-function compileFile(src, dest = process.cwd(), data = {}) {
+function compileFile(src, dest = process.cwd(), options = {}) {
 	var path = require('path');
 	var fs = require('fs-extra');
 	var ejs = require('ejs');
@@ -108,22 +111,46 @@ function compileFile(src, dest = process.cwd(), data = {}) {
 		throw new Error('Archie needs to know where your {source} files are.')
 	}
 
+	// Ensure data exists.
+	options.data = options.data || {};
+
 	// Compile file.
-	return ejs.renderFile(src, data, data._ejs || {}, function (error, content) {
+	return ejs.renderFile(src, options.data, options.data._ejs || {}, function (error, content) {
 		if (error) {
 			throw error;
 		}
-		var file = {
-			filepath: path.relative(process.cwd(), path.resolve(dest, path.relative(data._basePath, path.dirname(src)), path.basename(src))),
-			content: content
-		};
+
+		// Create file object.
+		var file = {};
+			file.source = src;
+			file.directory = path.relative(options.basePath, path.dirname(src));
+			file.name = path.basename(src);
+			file.pathRelative = path.join(path.relative(options.basePath, path.dirname(src)), file.name);
+			file.filepath = path.relative(process.cwd(), path.resolve(dest, file.directory, file.name));
+			file.content = content;
+
+		// For .json files, if a destination file exists, process it as js object and only update portions that changed.
+		if (options.update && options.data._json && path.extname(file.filepath) === '.json' && options.data._json[file.pathRelative] && fs.pathExistsSync(file.filepath)) {
+				// Merge data with json file.
+				file.content = Object.assign(
+					{},
+					// Old file content.
+					fs.readJsonSync(file.filepath),
+					// New file content.
+					JSON.parse(file.content),
+					// Data from archie data's options.data._json[{filepath}].
+					options.data._json[file.pathRelative]
+				);
+				file.content = JSON.stringify(file.content, null, '\t');
+		}
 
 		// Save file.
-		return fs.outputFile(file.filepath, file.content).then(function (error) {
-			if (error) {
-				throw error;
-			}
-			return file;
-		});
+		return fs.outputFile(file.filepath, file.content)
+			.then(function (error) {
+				if (error) {
+					throw error;
+				}
+				return file;
+			});
 	});
 }

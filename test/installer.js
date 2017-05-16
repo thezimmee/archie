@@ -53,7 +53,7 @@ describe('archie', function () {
 					name: 'Archie',
 					alias: 'Archie the Amazing'
 				},
-				pkg: require('../archie.data.js').pkg,
+				_json: require('../archie.data.js')._json,
 				eslint: {
 					env: {
 						node: true
@@ -72,7 +72,7 @@ describe('archie', function () {
 		tests.forEach(function (test, i) {
 			it('should compile ' + test.src + ' to ' + (test.dest || '{cwd}'), function (done) {
 				// Run compiler.
-				archie.install(test.src, test.dest, test.data).then(function (files) {
+				archie.install(test.src, test.dest, {data: test.data}).then(function (files) {
 					// Expect files to be array of file objects.
 					expect(files).to.be.instanceof(Array);
 					// Expect actualFilepaths to be same as test.expectedFiles[i].
@@ -99,6 +99,31 @@ describe('archie', function () {
 			expect(archie.install).to.throw();
 			// Finding no source files should throw an error.
 			expect(archie.install.bind(archie, 'examples/no-exist')).to.throw();
+		});
+
+		it('should update only part of package.json', function (done) {
+			// Setup.
+			var fs = require('fs-extra');
+			var path = require('path');
+			var originalFilepath = 'test/fixtures/package--before.json';
+			var srcFilepath = path.join(tempDir, 'package.json');
+			var expectedOutputFilepath = 'test/fixtures/package--after.json';
+
+			// Copy package--before.json to .temp.
+			fs.copy(originalFilepath, srcFilepath)
+				.then(function () {
+					// Run archie install with the --update option.
+					return archie.install(srcFilepath, tempDir, {update: true});
+				}).then(function (files) {
+					// Expect files to only have one file.
+					expect(files).to.have.lengthOf(1);
+					// Expect package.json to update with new data while keeping untouched properties.
+					var expectedContent = JSON.stringify(fs.readJsonSync(expectedOutputFilepath), null, '\t');
+					expect(expectedContent).to.deep.equal(files[0].content);
+					done();
+				}).catch(function (error) {
+					done(error);
+				});
 		});
 	});
 });

@@ -1,13 +1,9 @@
 {
 	"name": "archie",
 	"description": "Archie the architect is a customizable build tool and a task runner.",
-	"version": "0.0.1",
-	"author": {
-		"name": "Zimmee",
-		"email": "thezimmee@gmail.com",
-		"url": "https://tysonzimmerman.com"
-	},
-	"repo": {
+	"version": "0.0.2",
+	"author": "The Zimmee <thezimmee@gmail.com>",
+	"repository": {
 		"type": "git",
 		"url": "https://github.com/thezimmee/archie"
 	},
@@ -15,5 +11,9 @@
 	"license": "MIT",
 	"homepage": "https://github.com/thezimmee/archie",
 	"keywords": "static, site, generator, front, end, css, framework",
-	"private": true
+	"private": true,
+	"scripts": {
+		"test": "mocha",
+		"echo": "echo I am package.json AFTER."
+	}
 }

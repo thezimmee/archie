@@ -1,0 +1,37 @@
+{
+  "name": "archie",
+  "version": "0.0.1",
+  "description": "Archie the architect is a customizable build tool and a task runner.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "bin": {
+    "archie": "./bin/archie.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "echo": "echo I am package.json BEFORE."
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "commander": "^2.9.0",
+    "ejs": "^2.5.6",
+    "es6-promise": "^4.1.0",
+    "fs-extra": "^3.0.1",
+    "glob-parent": "^3.1.0",
+    "globby": "^6.1.0",
+    "mocha": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thezimmee/archie"
+  },
+  "author": "The Zimmee <thezimmee@gmail.com>",
+  "license": "MIT",
+  "bugs": "https://github.com/thezimmee/archie/issues",
+  "homepage": "https://github.com/thezimmee/archie",
+  "keywords": "static, site, generator, front, end, css, framework",
+  "private": true
+}

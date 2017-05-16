@@ -1,1 +1,1 @@
-<%- JSON.stringify(pkg, null, '\t') %>
+<%- JSON.stringify(_json["package.json"], null, '\t') %>
