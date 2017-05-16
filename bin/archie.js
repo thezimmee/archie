@@ -5,11 +5,13 @@ var cli = require('commander');
 var pkg = require('../package.json');
 
 
+/** archie --version */
 cli
 	.version(pkg.version)
 	.description(pkg.description);
 
 
+/** archie install */
 cli
 	.command('install <src> [dest]')
 	.alias('i')
@@ -29,4 +31,18 @@ cli
 	});
 
 
+/** archie <cmd> */
+cli
+	.command('* <cmd>')
+	.description('Run an npm task')
+	.parse(process.argv)
+	.action(function (cmd, cli) {
+		var archie = require('../');
+		var flags = cli.rawArgs.slice(3);
+
+		return archie.run(cmd, flags);
+	});
+
+
+/** parse args */
 cli.parse(process.argv);

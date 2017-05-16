@@ -7,7 +7,8 @@
 
 // Global archie object.
 var archie = module.exports = {
-	install: installBlock
+	install: installBlock,
+	run: runTask
 };
 
 
@@ -152,5 +153,40 @@ function compileFile(src, dest = process.cwd(), options = {}) {
 				}
 				return file;
 			});
+	});
+}
+
+
+/**
+ * @brief Pass a command to `npm run`.
+ *
+ * @param command {string} Command to run.
+ * @param flags {array} Array of flags / arguments for command.
+ * @return {process} Child process instance, enhanced with Promise support (see https://github.com/sindresorhus/execa).
+ */
+function runTask(command, flags = []) {
+	var path = require('path');
+	var fs = require('fs-extra');
+	var pkg = path.join(process.cwd(), 'package.json');
+
+	// Make sure package.json exists.
+	if (fs.pathExistsSync(pkg)) {
+		pkg = require(pkg);
+	} else {
+		throw new Error('Uh oh... Archie could not find `package.json` in your working directory. You\'ll need to create it with your scripts in order to have Archie run ' + command + '.');
+	}
+
+	// Make sure script exists in package.json.
+	if (!pkg.scripts[command]) {
+		throw new Error('Uh oh... Archie could not find the `' + command + '` script in package.json. Typo?');
+	}
+
+	// Run it.
+	var exec = require('execa');
+	command = exec('npm', ['run', command].concat(flags), {stdio: 'inherit'});
+
+	// Run the command.
+	return command.catch(function (error) {
+		return error;
 	});
 }

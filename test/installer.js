@@ -17,7 +17,7 @@ var archie = require('../index.js');
 var tempDir = '.temp';
 
 
-describe('archie', function () {
+describe('archie the installer', function () {
 
 	after(function () {
 		fs.removeSync('test-file.md');
