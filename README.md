@@ -1,5 +1,7 @@
 # Archie the Architect
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5323e8ecc9e94a3abe87f86279365ddb)](https://www.codacy.com/app/thezimmee/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thezimmee/archie&amp;utm_campaign=Badge_Grade)
+
 ## Planned v1 features
 
 1. [x] Feature: Archie the installer (`archie install {src} {dest}`):
