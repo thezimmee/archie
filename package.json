@@ -14,6 +14,7 @@
     "test:lint": "./node_modules/.bin/eslint ./*.js ./bin/*.js ./bin/**/*.js ./test/*.js ./test/**/*.js && echo 'JS linter done!'",
     "test:unit": "nyc ./node_modules/.bin/mocha",
     "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls && echo 'DONE! Test coverage submitted to https://coveralls.io.'",
+    "codacy": "npm test && nyc report --reporter=text-lcov | ./node_modules/.bin/codacy-coverage && echo 'DONE! Test coverage submitted to https://codacy.com.'",
     "codecov": "npm test && nyc report --reporter=lcov > coverage.lcov && ./node_modules/.bin/codecov --token=3b10ee78-0f52-466f-8d15-22d2c5e67017 && echo 'DONE! Test coverage submitted to https://codecov.io.'",
     "precommit": "npm test -s",
     "echo": "echo",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "codacy-coverage": "^2.0.2",
     "codecov": "^2.2.0",
     "commander": "^2.9.0",
     "coveralls": "^2.13.1",
