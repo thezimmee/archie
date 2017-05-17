@@ -9,6 +9,14 @@
   "bin": {
     "archie": "./bin/archie.js"
   },
+  "scripts": {
+    "test": "npm run test:lint -s && npm run test:unit -s",
+    "test:lint": "./node_modules/.bin/eslint ./*.js ./bin/*.js ./bin/**/*.js ./test/*.js ./test/**/*.js",
+    "test:unit": "./node_modules/.bin/mocha",
+    "precommit": "npm test -s",
+    "echo": "echo",
+    "script": "node test/fixtures/test-script.js"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
@@ -20,12 +28,8 @@
     "fs-extra": "^3.0.1",
     "glob-parent": "^3.1.0",
     "globby": "^6.1.0",
+    "husky": "^0.13.3",
     "mocha": "^3.3.0"
-  },
-  "scripts": {
-    "test": "mocha",
-    "echo": "echo",
-    "script": "node test/fixtures/test-script.js"
   },
   "repository": {
     "type": "git",
