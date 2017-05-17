@@ -26,7 +26,7 @@ cli
 		};
 
 		return archie.install(src, dest, options).then(function () {
-			console.log('DONE. ツ');
+			console.log('DONE. ツ'); // eslint-disable-line
 		});
 	});
 

@@ -28,8 +28,8 @@ describe('archie the runner', function () {
 	it('should pass arguments to the `echo` npm script', function (done) {
 		// Run it.
 		var exec = require('execa');
-		exec('archie', ['echo', 'Hello world!!!']).then(function (child) {
-			expect(child.stdout).to.equal('\n> archie@0.0.1 echo /Volumes/Home/Projects/archie\n> echo "Hello world!!!"\n\nHello world!!!');
+		exec('archie', ['echo', 'Hello world!!!', '-s']).then(function (child) {
+			expect(child.stdout).to.equal('Hello world!!!');
 			done();
 		}).catch(done);
 	});

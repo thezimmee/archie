@@ -44,6 +44,6 @@ data.eslint = {
 	},
 	globals: {
 		angular: false,
-        $: false
+		$: false
 	}
 };

@@ -5,4 +5,4 @@
  */
 
 
-var data = module.exports = require('../../archie.data.js');
+module.exports = require('../../archie.data.js');

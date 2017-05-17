@@ -6,7 +6,7 @@
 
 
 // Global archie object.
-var archie = module.exports = {
+var archie = module.exports = { // eslint-disable-line
 	install: installBlock,
 	run: runTask
 };
@@ -49,7 +49,9 @@ function installBlock(src, dest, options) {
 		} else if (stats.isFile()) {
 			options.basePath = path.dirname(src);
 		}
-	} catch(error) {}
+	} catch(error) {
+		// eslint-disable-line
+	}
 
 	// Get source file paths.
 	var filepaths = getSourceFilepaths(src);
@@ -109,7 +111,7 @@ function compileFile(src, dest = process.cwd(), options = {}) {
 	var ejs = require('ejs');
 
 	if (!src) {
-		throw new Error('Archie needs to know where your {source} files are.')
+		throw new Error('Archie needs to know where your {source} files are.');
 	}
 
 	// Ensure data exists.
@@ -123,26 +125,26 @@ function compileFile(src, dest = process.cwd(), options = {}) {
 
 		// Create file object.
 		var file = {};
-			file.source = src;
-			file.directory = path.relative(options.basePath, path.dirname(src));
-			file.name = path.basename(src);
-			file.pathRelative = path.join(path.relative(options.basePath, path.dirname(src)), file.name);
-			file.filepath = path.relative(process.cwd(), path.resolve(dest, file.directory, file.name));
-			file.content = content;
+		file.source = src;
+		file.directory = path.relative(options.basePath, path.dirname(src));
+		file.name = path.basename(src);
+		file.pathRelative = path.join(path.relative(options.basePath, path.dirname(src)), file.name);
+		file.filepath = path.relative(process.cwd(), path.resolve(dest, file.directory, file.name));
+		file.content = content;
 
 		// For .json files, if a destination file exists, process it as js object and only update portions that changed.
 		if (options.update && options.data._json && path.extname(file.filepath) === '.json' && options.data._json[file.pathRelative] && fs.pathExistsSync(file.filepath)) {
 				// Merge data with json file.
-				file.content = Object.assign(
-					{},
-					// Old file content.
-					fs.readJsonSync(file.filepath),
-					// New file content.
-					JSON.parse(file.content),
-					// Data from archie data's options.data._json[{filepath}].
-					options.data._json[file.pathRelative]
-				);
-				file.content = JSON.stringify(file.content, null, '\t');
+			file.content = Object.assign(
+				{},
+				// Old file content.
+				fs.readJsonSync(file.filepath),
+				// New file content.
+				JSON.parse(file.content),
+				// Data from archie data's options.data._json[{filepath}].
+				options.data._json[file.pathRelative]
+			);
+			file.content = JSON.stringify(file.content, null, '\t');
 		}
 
 		// Save file.

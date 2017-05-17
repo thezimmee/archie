@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "npm run test:lint -s && npm run test:unit -s",
-    "test:lint": "./node_modules/.bin/eslint ./*.js ./bin/*.js ./bin/**/*.js ./test/*.js ./test/**/*.js",
+    "test:lint": "./node_modules/.bin/eslint ./*.js ./bin/*.js ./bin/**/*.js ./test/*.js ./test/**/*.js && echo 'JS linter done!'",
     "test:unit": "./node_modules/.bin/mocha",
     "precommit": "npm test -s",
     "echo": "echo",

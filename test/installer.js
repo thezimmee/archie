@@ -60,7 +60,7 @@ describe('archie the installer', function () {
 					},
 					globals: {
 						angular: true,
-				        $: true
+						$: true
 					}
 				}
 			},
@@ -69,13 +69,13 @@ describe('archie the installer', function () {
 		}];
 
 		// Run each test.
-		tests.forEach(function (test, i) {
+		tests.forEach(function (test) {
 			it('should compile ' + test.src + ' to ' + (test.dest || '{cwd}'), function (done) {
 				// Run compiler.
 				archie.install(test.src, test.dest, {data: test.data}).then(function (files) {
 					// Expect files to be array of file objects.
 					expect(files).to.be.instanceof(Array);
-					// Expect actualFilepaths to be same as test.expectedFiles[i].
+					// Expect actualFilepaths to be same as file.filepath.
 					var actualFilepaths = [];
 					files.forEach(function (file) {
 						actualFilepaths.push(file.filepath);
@@ -84,7 +84,7 @@ describe('archie the installer', function () {
 					return files;
 				}).then(function (files) {
 					// Expect each file to be same as file in .temp/
-					files.forEach(function (file, n) {
+					files.forEach(function (file) {
 						var fileIndex = test.expectedFiles.indexOf(file.filepath);
 						var expectedContent = fs.readFileSync(test.expectedContentFiles[fileIndex], 'utf8');
 						expect(fileIndex).to.be.above(-1);
@@ -103,8 +103,6 @@ describe('archie the installer', function () {
 
 		it('should update only part of package.json', function (done) {
 			// Setup.
-			var fs = require('fs-extra');
-			var path = require('path');
 			var originalFilepath = 'test/fixtures/package--before.json';
 			var srcFilepath = path.join(tempDir, 'package.json');
 			var expectedOutputFilepath = 'test/fixtures/package--after.json';
