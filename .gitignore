@@ -9,6 +9,7 @@ node_modules
 build/
 
 ## Test coverage reports
+.coveralls.yml
 .nyc_output/
 coverage.lcov
 coverage/
