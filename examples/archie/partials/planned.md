@@ -1,11 +1,3 @@
-# Archie the Architect
-
-[![CodeFactor](https://www.codefactor.io/repository/github/thezimmee/archie/badge)](https://www.codefactor.io/repository/github/thezimmee/archie)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5323e8ecc9e94a3abe87f86279365ddb)](https://www.codacy.com/app/thezimmee/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thezimmee/archie&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/5323e8ecc9e94a3abe87f86279365ddb)](https://www.codacy.com/app/thezimmee/archie?utm_source=github.com&utm_medium=referral&utm_content=thezimmee/archie&utm_campaign=Badge_Coverage)
-[![codecov](https://codecov.io/gh/thezimmee/archie/branch/v1/graph/badge.svg)](https://codecov.io/gh/thezimmee/archie)
-[![Coverage Status](https://coveralls.io/repos/github/thezimmee/archie/badge.svg?branch=v1)](https://coveralls.io/github/thezimmee/archie?branch=v1)
-
 ## Planned v1 features
 
 1. [x] Feature: Archie the installer (`archie install {src} {dest}`):
@@ -26,7 +18,7 @@
     - [x] `merge`: JSON files to merge, not overwrite (useful for dynamic .json files, such as package.json).
     - [x] `profile`: Sets configuration property; e.g., --profile=archie will set archie.data._archie as configuration object.
 5. [ ] Example: Automate project creation:
-    - [ ] Automatigically create README.md
+    - [x] Automatigically create README.md
     - [ ] Automatigically create CONTRIBUTING.md (pull in latest contributors: commiters, reviewers, issue creators, issue commenters, PR creators)
     - [ ] Automatigically create LICENSE.md
     - [ ] Automatigically create BACKERS.md (pull in latest sponsors)

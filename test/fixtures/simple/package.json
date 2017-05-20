@@ -1,7 +1,7 @@
 {
 	"name": "archie",
 	"description": "Archie the architect is a customizable build tool and a task runner.",
-	"version": "0.0.2",
+	"version": "0.0.1",
 	"author": "The Zimmee <thezimmee@gmail.com>",
 	"repository": {
 		"type": "git",

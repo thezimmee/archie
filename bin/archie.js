@@ -3,6 +3,7 @@
 
 var cli = require('commander');
 var pkg = require('../package.json');
+var utils = require('../lib/utils.js');
 
 
 /** archie --version */
@@ -19,14 +20,13 @@ cli
 	.option('-e, --dest <path>', 'Path to destination directory.')
 	.option('-d, --data <path>', 'Path to archie data file.')
 	.option('-p, --profile <string>', 'Property name to use for options object (defaults to \'_installer\').')
-	// Not allowing --merge-json here as it would need to parsed to JSON and is likely not needed via cli.
-	// .option('-m, --merge-json <paths>', 'Objects array with .json filepath as keyname and data to merge to existing .json files (useful for managing dynamic .json files, such as package.json)')
-	.option('-i, --ignore <paths>', 'Array of filepaths to ignore / not compile to destination (useful for partials).', list)
+	.option('-m, --merge <paths>', '(true) Comma-separated list of source paths or globs to merge src and dest as JSON data. Useful for managing dynamic .json files, such as package.json. Default: `**/*.json`.', utils.list)
+	.option('-i, --ignore <paths>', 'Comma-separated list of filepaths to ignore / not compile to destination (useful for partials).', utils.list)
 	.option('-b, --base <path>', 'Base path. Sets all <src> files relative to this path.')
 	.action(function (src, cli) {
 		var archie = require('../');
 		var options = {};
-		var keys = ['dest', 'data', 'profile', 'mergeJson', 'ignore', 'base'];
+		var keys = ['dest', 'data', 'profile', 'merge', 'ignore', 'base'];
 
 		// Attach each option in cli to options.
 		keys.forEach(function (key) {
@@ -60,9 +60,3 @@ cli
 
 /** parse args */
 cli.parse(process.argv);
-
-
-/** Convert value to list */
-function list(value) {
-	return value.split(',');
-}

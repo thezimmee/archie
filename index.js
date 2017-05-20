@@ -29,7 +29,7 @@ function installBlock(options = {}) {
 		dest: process.cwd(),
 		data: 'archie.data.js',
 		profile: '_installer',
-		merge: [],
+		merge: ['**/*.json'],
 		ignore: [],
 		base: undefined
 	};
@@ -63,13 +63,15 @@ function installBlock(options = {}) {
 		throw new Error('No source files were found.');
 	}
 
-	// Compile each file.
+	// Filter out ignored files from options.src.
 	if (options.ignore.length) {
-		options.ignore.forEach(function (pattern) {
-			options.src = mm(options.src, '!' + pattern);
+		var ignoredFiles = mm(options.src, options.ignore, {dot: true});
+		options.src = options.src.filter(function (i) {
+			return ignoredFiles.indexOf(i) < 0;
 		});
 	}
 
+	// Compile each file.
 	options.src.forEach(function (filepath) {
 		// Compile file.
 		promises.push(compileFile(filepath, options, data));
@@ -114,11 +116,13 @@ function getSourceFilepaths(src) {
 function compileFile(src, options = {}, data = {}) {
 	var path = require('path');
 	var fs = require('fs-extra');
+	var mm = require('micromatch');
 	var ejs = require('ejs');
 
 	// Compile file.
 	return ejs.renderFile(src, data, data._ejs || {}, function (error, content) {
 		if (error) {
+			error.message = 'compiling ' + src + ' (' + error.message + ')';
 			throw error;
 		}
 
@@ -131,27 +135,26 @@ function compileFile(src, options = {}, data = {}) {
 		file.filepath = path.relative(process.cwd(), path.resolve(options.dest, file.directory, file.name));
 		file.content = content;
 
-		// Process .json files that are configured to be merged.
-		if (path.extname(file.filepath) === '.json' && data[options.profile].mergeJson && data[options.profile].mergeJson[file.pathRelative]) {
-			// Merge data with json file.
+		// Process JSON files that are configured to be merged.
+		if (options.merge.length && mm.any(file.source, options.merge, {dot: true})) {
+			var newContent = JSON.parse(file.content);
 			file.content = Object.assign(
 				{},
+				// Put new file content here so properties are sorted by new content, not old.
+				newContent,
 				// Old file content.
-				fs.readJsonSync(file.filepath),
-				// New file content.
-				JSON.parse(file.content),
-				// JSON data from archie data's running profile.
-				data[options.profile].mergeJson[file.pathRelative]
+				fs.readJsonSync(file.filepath, {throws: false}),
+				// New file content goese here again to overwrite old file properties.
+				newContent
 			);
 			file.content = JSON.stringify(file.content, null, '\t');
 		}
-
-
 
 		// Save file.
 		return fs.outputFile(file.filepath, file.content)
 			.then(function (error) {
 				if (error) {
+					error.message = 'saving ' + file.source + ' (' + error.message + ')';
 					throw error;
 				}
 				return file;
@@ -189,7 +192,5 @@ function runTask(command, flags = []) {
 	command = exec('npm', ['run', command].concat(flags), {stdio: 'inherit'});
 
 	// Run the command.
-	return command.catch(function (error) {
-		return error;
-	});
+	return command;
 }

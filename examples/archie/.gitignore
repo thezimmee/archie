@@ -1,0 +1,15 @@
+## Node
+node_modules
+
+## IDE
+*.sublime-*
+
+## Build / temp folders
+.temp/
+build/
+
+## Test coverage reports
+.coveralls.yml
+.nyc_output/
+coverage.lcov
+coverage/

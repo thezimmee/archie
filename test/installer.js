@@ -94,7 +94,6 @@ describe('archie the installer', function () {
 			options: {
 				src: ['examples/simple'],
 				data: 'test/fixtures/archie.data.js',
-				// profile: '_alt',
 				dest: '.test',
 				base: 'examples/simple',
 				ignore: ['**/nested/*']
@@ -103,20 +102,29 @@ describe('archie the installer', function () {
 			expectedContentFile: function (filepath) {
 				return filepath.replace('.test/', 'test/fixtures/simple/');
 			}
-		// }, {
-		// 	// Ignore files in nested.
-		// 	options: {
-		// 		src: ['examples/simple'],
-		// 		data: 'test/fixtures/archie.data.js',
-		// 		// profile: '_alt',
-		// 		dest: '.test',
-		// 		base: 'examples/simple',
-		// 		ignore: ['**/*.md', '**/*.json']
-		// 	},
-		// 	expectedFiles: ['.test/.eslintrc.js'],
-		// 	expectedContentFile: function (filepath) {
-		// 		return filepath.replace('.test/', 'test/fixtures/simple/');
-		// 	}
+		}, {
+			// Ignore files in nested.
+			options: {
+				src: ['examples/simple'],
+				data: 'test/fixtures/archie.data.js',
+				// profile: '_alt',
+				dest: '.test',
+				base: 'examples/simple',
+				ignore: ['**/*.md', '**/*.json']
+			},
+			expectedFiles: ['.test/.eslintrc.js'],
+			expectedContentFile: function (filepath) {
+				return filepath.replace('.test/', 'test/fixtures/simple/');
+			}
+		}, {
+			// Install examples/archie
+			options: {
+				profile: '_archie',
+			},
+			expectedFiles: ['.coveralls.yml', '.eslintrc.js', '.gitignore', 'archie.sublime-project', 'package.json', 'README.md'],
+			expectedContentFile: function (filepath) {
+				return path.join('test/fixtures/archie', filepath);
+			}
 		}];
 
 		// Run each test.
@@ -167,20 +175,42 @@ describe('archie the installer', function () {
 		// Do a JSON merge.
 		it('should merge data to package.json', function (done) {
 			// Setup.
-			var originalFilepath = 'test/fixtures/package--before.json';
-			var srcFilepath = path.join('.temp', 'package.json');
-			var expectedOutputFilepath = 'test/fixtures/package--after.json';
+			var existingFilepath = 'test/fixtures/package--existing.json';
+			var srcFilepath = 'test/fixtures/package--src.json';
 
-			// Copy package--before.json to .temp.
-			fs.copy(originalFilepath, srcFilepath)
+			// Copy package--existing.json to .temp.
+			fs.copy(existingFilepath, '.temp/package--src.json')
 				.then(function () {
-					// Run archie install '_mergeJson' profile to set the --merge-json option.
+					// Run archie install '_jsonProfile' profile to set the --merge option.
 					return archie.install({src: [srcFilepath], dest: '.temp', profile: '_jsonProfile'});
 				}).then(function (files) {
 					// Expect files to only have one file.
 					expect(files).to.have.lengthOf(1);
 					// Expect package.json to update with new data while leaving existing properties.
-					var expectedContent = JSON.stringify(fs.readJsonSync(expectedOutputFilepath), null, '\t');
+					var expectedContent = JSON.stringify(fs.readJsonSync(srcFilepath), null, '\t');
+					expect(expectedContent).to.deep.equal(files[0].content);
+					done();
+				}).catch(function (error) {
+					done(error);
+				});
+		});
+
+		// Overwrite package.json with no merge.
+		it('should overwrite (not merge) package.json', function (done) {
+			// Setup.
+			var existingFilepath = 'test/fixtures/package2--existing.json';
+			var srcFilepath = 'test/fixtures/package2--src.json';
+
+			// Copy package--existing.json to .temp.
+			fs.copy(existingFilepath, '.temp/package2--src.json')
+				.then(function () {
+					// Run archie install '_jsonProfile' profile to set the --merge option.
+					return archie.install({src: [srcFilepath], dest: '.temp', profile: '_jsonProfile', merge: []});
+				}).then(function (files) {
+					// Expect files to only have one file.
+					expect(files).to.have.lengthOf(1);
+					// Expect package.json to update with new data while leaving existing properties.
+					var expectedContent = JSON.stringify(fs.readJsonSync(srcFilepath), null, '\t');
 					expect(expectedContent).to.deep.equal(files[0].content);
 					done();
 				}).catch(function (error) {

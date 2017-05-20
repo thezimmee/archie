@@ -5,20 +5,28 @@
  */
 
 module.exports = {
-	extends: 'eslint:recommended',
-	env: {
-		browser: true,
+	"env": {
+		"es6": true,
+		"node": true,
+		"mocha": true
 	},
-	globals: {
-		angular: false,
-		$: false,
-	},
-	rules: {
-		// enable additional rules
-		indent: ['error', 4],
-		quotes: ['error', 'single'],
-		semi: ['error', 'always'],
-		// override default rules
-		// disable rules
+	"extends": "eslint:recommended",
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
 	}
 };

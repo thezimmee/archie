@@ -33,4 +33,24 @@ describe('archie the runner', function () {
 			done();
 		}).catch(done);
 	});
+
+	it('should fail since command doesn\'t exist.', function () {
+		// Run it.
+		expect(archie.run.bind(archie, 'no-exist')).to.throw();
+	});
+
+	it('should fail since `package.json` doesn\'t exist.', function () {
+		var fs = require('fs-extra');
+		var originalPackageJson = 'package.json';
+		var renamedPackageJson = 'package--renamed.json';
+
+		// Temporarily move archie data file.
+		fs.moveSync(originalPackageJson, renamedPackageJson);
+
+		// Run it.
+		expect(archie.run.bind(archie, 'no-exist')).to.throw();
+
+		// Move archie.data.js back.
+		fs.moveSync(renamedPackageJson, originalPackageJson);
+	});
 });
