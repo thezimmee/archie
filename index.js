@@ -15,58 +15,66 @@ var archie = module.exports = { // eslint-disable-line
 /**
  * @brief Compile files with EJS.
  *
- * @param src {string} File, directory, or glob source files.
- * @param dest {string} Destination directory.
  * @param options {object} Options object.
  * @return {array} Array of file objects (see compileFile function).
  */
-function installBlock(src, dest, options) {
+function installBlock(options = {}) {
 	var path = require('path');
 	var fs = require('fs-extra');
-	var glob = require('globby');
 	var Promise = require('es6-promise').Promise;
+	var mm = require('micromatch');
+	var glob = require('globby');
 	var promises = [];
-	var stats;
+	var defaults = {
+		dest: process.cwd(),
+		data: 'archie.data.js',
+		profile: '_installer',
+		merge: [],
+		ignore: [],
+		base: undefined
+	};
+	var data = getData((options && options.data) ? options.data : defaults.data);
 
-	// Set options defaults.
-	options = Object.assign({data: 'archie.data.js'}, options);
+	// Apply defaults.
+	options = Object.assign({}, defaults, data[options.profile || defaults.profile], options);
 
-	// Grab archie data.
-	if (typeof options.data !== 'object') {
-		options.data = getData(options.data);
-	}
-
-	// Get true src path and base directory.
-	options.basePath = options.basePath || '';
-	if (glob.hasMagic(src)) {
-		options.basePath = require('glob-parent')(src);
-	}
-	try {
-		stats = fs.statSync(src);
-		if (stats.isDirectory()) {
-			options.basePath = src;
-			src = path.join(src, '**/*');
-		} else if (stats.isFile()) {
-			options.basePath = path.dirname(src);
-		}
-	} catch(error) {
-		// eslint-disable-line
-	}
-
-	// Get source file paths.
-	var filepaths = getSourceFilepaths(src);
-	if (!filepaths.length) {
-		throw new Error('No source files were found.');
-	}
-	// Compile each file.
-	filepaths.forEach(function (src) {
-		// Do not compile `archie.block.js`
-		if (path.basename(src) === 'archie.block.js') {
+	// Get all files in a directory if options.src is a directory.
+	options.src.forEach(function (filepath, i) {
+		if (glob.hasMagic(filepath)) {
 			return;
 		}
-		// Compile file.
-		promises.push(compileFile(src, dest, options));
+		var stats = fs.statSync(filepath);
+		if (stats && stats.isDirectory()) {
+			if (i === 1) {
+				options.base = options.base || filepath;
+			}
+			options.src[i] = path.join(filepath, '**/*');
+		} else if (stats && stats.isFile() && i === 1) {
+			options.base = options.base || path.dirname(filepath);
+		}
 	});
+
+	// Expand glob patterns.
+	options.src = getSourceFilepaths(options.src);
+	options.base = options.base || require('glob-parent')(options.src[0]);
+
+	// Throw error if no source files.
+	if (!options.src.length) {
+		throw new Error('No source files were found.');
+	}
+
+	// Compile each file.
+	if (options.ignore.length) {
+		options.ignore.forEach(function (pattern) {
+			options.src = mm(options.src, '!' + pattern);
+		});
+	}
+
+	options.src.forEach(function (filepath) {
+		// Compile file.
+		promises.push(compileFile(filepath, options, data));
+	});
+
 	// Return promise which results in array of file objects.
 	return Promise.all(promises);
 }
@@ -80,7 +88,6 @@ function installBlock(src, dest, options) {
  */
 function getData(dataPath) {
 	var path = require('path');
-	dataPath = dataPath || './archie.data.js';
 	return require(path.resolve(dataPath));
 }
 
@@ -101,24 +108,16 @@ function getSourceFilepaths(src) {
  * @brief Compiles a file with archie data.
  *
  * @param src {string} Source file path.
- * @param dest {string} (optional) Destination directory. Defaults to cwd.
  * @param options {object} Options object.
  * @return {object} {filepath: '{destination path}', content: '{file contents}'}
  */
-function compileFile(src, dest = process.cwd(), options = {}) {
+function compileFile(src, options = {}, data = {}) {
 	var path = require('path');
 	var fs = require('fs-extra');
 	var ejs = require('ejs');
 
-	if (!src) {
-		throw new Error('Archie needs to know where your {source} files are.');
-	}
-
-	// Ensure data exists.
-	options.data = options.data || {};
-
 	// Compile file.
-	return ejs.renderFile(src, options.data, options.data._ejs || {}, function (error, content) {
+	return ejs.renderFile(src, data, data._ejs || {}, function (error, content) {
 		if (error) {
 			throw error;
 		}
@@ -126,26 +125,28 @@ function compileFile(src, dest = process.cwd(), options = {}) {
 		// Create file object.
 		var file = {};
 		file.source = src;
-		file.directory = path.relative(options.basePath, path.dirname(src));
+		file.directory = path.relative(options.base, path.dirname(src));
 		file.name = path.basename(src);
-		file.pathRelative = path.join(path.relative(options.basePath, path.dirname(src)), file.name);
-		file.filepath = path.relative(process.cwd(), path.resolve(dest, file.directory, file.name));
+		file.pathRelative = path.join(path.relative(options.base, path.dirname(src)), file.name);
+		file.filepath = path.relative(process.cwd(), path.resolve(options.dest, file.directory, file.name));
 		file.content = content;
 
-		// For .json files, if a destination file exists, process it as js object and only update portions that changed.
-		if (options.update && options.data._json && path.extname(file.filepath) === '.json' && options.data._json[file.pathRelative] && fs.pathExistsSync(file.filepath)) {
-				// Merge data with json file.
+		// Process .json files that are configured to be merged.
+		if (path.extname(file.filepath) === '.json' && data[options.profile].mergeJson && data[options.profile].mergeJson[file.pathRelative]) {
+			// Merge data with json file.
 			file.content = Object.assign(
 				{},
 				// Old file content.
 				fs.readJsonSync(file.filepath),
 				// New file content.
 				JSON.parse(file.content),
-				// Data from archie data's options.data._json[{filepath}].
-				options.data._json[file.pathRelative]
+				// JSON data from archie data's running profile.
+				data[options.profile].mergeJson[file.pathRelative]
 			);
 			file.content = JSON.stringify(file.content, null, '\t');
 		}
+
+
 
 		// Save file.
 		return fs.outputFile(file.filepath, file.content)

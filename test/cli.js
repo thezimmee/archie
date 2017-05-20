@@ -16,7 +16,7 @@ var tempDir = '.temp';
 
 
 describe('archie cli', function () {
-	describe('install <src> [dest]', function () {
+	describe('install [options]', function () {
 		afterEach(function () {
 			// Clean up.
 			fs.removeSync(tempDir);
@@ -29,7 +29,7 @@ describe('archie cli', function () {
 			var expectedContentFiles = ['test/fixtures/simple/package.json', 'test/fixtures/simple/.eslintrc.js', 'test/fixtures/simple/nested/test-file.md'];
 
 			// Run command.
-			var install = spawn('archie', ['i', 'examples/simple', '.temp', '--data', 'test/fixtures/archie.data.js']);
+			var install = spawn('archie', ['i', 'examples/simple', '--data', 'test/fixtures/archie.data.js'], {stdio: 'inherit'});
 			install.on('close', function () {
 				// Expect each file to be same as file in .temp/
 				expectedFilepaths.forEach(function (filepath, n) {

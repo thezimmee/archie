@@ -1,1 +1,1 @@
-<%- JSON.stringify(_json["package.json"], null, '\t') %>
+<%- JSON.stringify(_jsonProfile.mergeJson["package.json"], null, '\t') %>

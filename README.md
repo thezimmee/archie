@@ -18,3 +18,17 @@
 2. [x] Feature: Archie the task master (`archie {cmd}`):
     - [x] When `{cmd}` in `archie {cmd}` is anything but another predefined archie command, pass the command and all arguments to `npm run {task}`.
 3. [x] Feature: Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
+4. [x] Feature: Add following config options to archie.data._installer:
+    - [x] `src`: Source files to install (makes `<src>` optional)
+    - [x] `dest`: Destination directory.
+    - [x] `ignore`: Files to not install / compile (useful for partial file includes).
+    - [x] `merge`: JSON files to merge, not overwrite (useful for dynamic .json files, such as package.json).
+    - [x] `profile`: Sets configuration property; e.g., --profile=archie will set archie.data._archie as configuration object.
+5. [ ] Automate project creation:
+    - [ ] Automatigically create README.md
+    - [ ] Automatigically create CONTRIBUTING.md (pull in latest contributors: commiters, reviewers, issue creators, issue commenters, PR creators)
+    - [ ] Automatigically create LICENSE.md
+    - [ ] Automatigically create BACKERS.md (pull in latest sponsors)
+    - [ ] Automatigically create HISTORY.md / CHANGELOG.md
+    - [ ] Automatigically inject badges
+    - [ ] Automatigically inject installation instructions
