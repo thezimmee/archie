@@ -1,6 +1,7 @@
 # Archie the Architect
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5323e8ecc9e94a3abe87f86279365ddb)](https://www.codacy.com/app/thezimmee/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thezimmee/archie&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/5323e8ecc9e94a3abe87f86279365ddb)](https://www.codacy.com/app/thezimmee/archie?utm_source=github.com&utm_medium=referral&utm_content=thezimmee/archie&utm_campaign=Badge_Coverage)
 [![CodeFactor](https://www.codefactor.io/repository/github/thezimmee/archie/badge)](https://www.codefactor.io/repository/github/thezimmee/archie)
 [![codecov](https://codecov.io/gh/thezimmee/archie/branch/v1/graph/badge.svg)](https://codecov.io/gh/thezimmee/archie)
 [![Coverage Status](https://coveralls.io/repos/github/thezimmee/archie/badge.svg?branch=v1)](https://coveralls.io/github/thezimmee/archie?branch=v1)

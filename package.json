@@ -13,9 +13,9 @@
     "test": "npm run test:lint -s && npm run test:unit -s",
     "test:lint": "./node_modules/.bin/eslint ./*.js ./bin/*.js ./bin/**/*.js ./test/*.js ./test/**/*.js && echo '=> All JS linted!'",
     "test:unit": "nyc ./node_modules/.bin/mocha",
-    "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls && echo 'DONE! Test coverage submitted to https://coveralls.io.'",
-    "codacy": "npm test && nyc report --reporter=text-lcov | ./node_modules/.bin/codacy-coverage && echo 'DONE! Test coverage submitted to https://codacy.com.'",
-    "codecov": "npm test && nyc report --reporter=lcov > coverage.lcov && ./node_modules/.bin/codecov --token=3b10ee78-0f52-466f-8d15-22d2c5e67017 && echo 'DONE! Test coverage submitted to https://codecov.io.'",
+    "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls && echo '=> DONE! Test coverage submitted to https://coveralls.io.'",
+    "codacy": "npm test && nyc report --reporter=text-lcov | ./node_modules/.bin/codacy-coverage && echo '=> DONE! Test coverage submitted to https://codacy.com.'",
+    "codecov": "npm test && nyc report --reporter=lcov > coverage.lcov && ./node_modules/.bin/codecov --token=3b10ee78-0f52-466f-8d15-22d2c5e67017 && echo '=> DONE! Test coverage submitted to https://codecov.io.'",
     "precommit": "npm test -s",
     "echo": "echo",
     "script": "node test/fixtures/test-script.js"
