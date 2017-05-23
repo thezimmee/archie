@@ -8,7 +8,7 @@
 
 ## Planned v1 features
 
-1. [x] Feature: Archie the installer (`archie install {src} {dest}`):
+- [x] Feature: Archie the installer (`archie install {src} {dest}`):
     - [x] Install / compile templated files to your project, applying archie data on compilation.
     - [x] `{src}` is required and should throw an error if not passed. If provided, it can be a file, directory, or glob of files. If it is a directory, it should glob all files inside that directory.
     - [x] `{dest}` is optional and defaults to `process.cwd()`.
@@ -16,20 +16,24 @@
     - [x] Provide a way to compile vanilla JS to a JSON file (like package.json).
     - [x] Run archie install from cli.
     - [x] Option to merge json to file if file doesn't exist. This is so files like package.json don't get overwritten completely.
-2. [x] Feature: Archie the task master (`archie {cmd}`):
+- [x] Feature: Archie the task master (`archie {cmd}`):
     - [x] When `{cmd}` in `archie {cmd}` is anything but another predefined archie command, pass the command and all arguments to `npm run {task}`.
-3. [x] Feature: Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
-4. [x] Feature: Add following config options to archie.data._installer:
+- [x] Feature: Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
+- [x] Feature: Add following config options to archie.data._installer:
     - [x] `src`: Source files to install (makes `<src>` optional)
     - [x] `dest`: Destination directory.
     - [x] `ignore`: Files to not install / compile (useful for partial file includes).
     - [x] `merge`: JSON files to merge, not overwrite (useful for dynamic .json files, such as package.json).
     - [x] `profile`: Sets configuration property; e.g., --profile=archie will set archie.data._archie as configuration object.
-5. [ ] Example: Automate project creation:
-    - [ ] Automatigically create README.md
-    - [ ] Automatigically create CONTRIBUTING.md (pull in latest contributors: commiters, reviewers, issue creators, issue commenters, PR creators)
-    - [ ] Automatigically create LICENSE.md
-    - [ ] Automatigically create BACKERS.md (pull in latest sponsors)
-    - [ ] Automatigically create HISTORY.md / CHANGELOG.md
+- [ ] Automate the project and release process:
+    - [ ] Set up automated build & release process with semantic-release to do the following (see [here](https://hackernoon.com/automate-npm-releases-with-semantic-release-and-human-written-change-logs-2adb1dce487), [here](https://ciphertrick.com/2017/04/10/automate-package-publishing-nodejs-semantic-release/), and [here](https://oncletom.io/2016/npm-release/)):
+        - [ ] Run automated builds and testing on a CI server ([CodeShip](https://codeship.com/features), [CodeFresh](https://codefresh.io/), or [TravisCI](travis-ci.com)).
+        - [ ] After a successful build, analyze new commits to see if there's something to publish (major/breaking, minor/feature, or patch/fix).
+        - [ ] Generate a [changelog](http://keepachangelog.com/) draft and open in sublime whenever a major/breaking, minor/feature, or patch/fix is released.
+        - [ ] Publish to NPM and GitHub releases with a tag.
+    - [x] Automatigically create README.md
     - [ ] Automatigically inject badges
-    - [ ] Automatigically inject installation instructions
+    - [ ] Create LICENSE.md template
+    - [ ] Automatigically create CONTRIBUTING.md (pull in latest contributors such as commiters, reviewers, issue creators, issue commenters, PR creators, using [github emojis](https://www.webpagefx.com/tools/emoji-cheat-sheet/); see [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) or [name-your-contributors](https://github.com/richardlitt/name-your-contributors))
+    - [ ] Automatigically create BACKERS.md (pull in latest sponsors)
+- [ ] Add ability to merge yaml files using [yaml.js](https://github.com/jeremyfa/yaml.js) or [write-yaml](https://github.com/jonschlinkert/write-yaml).

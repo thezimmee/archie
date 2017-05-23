@@ -5,13 +5,14 @@
  */
 
 
+var pkg = require('./package.json');
 var data = module.exports = {};
 
 data.project = {
 	name: 'Archie',
 	alias: 'Archie the architect',
 	description: 'Archie the architect is a customizable build tool and a task runner.',
-	version: '0.0.1',
+	version: (pkg && pkg.version) ? pkg.version : '0.0.1',
 	author: 'The Zimmee <thezimmee@gmail.com>',
 	homepage: 'https://github.com/thezimmee/archie'
 };
