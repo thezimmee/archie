@@ -122,7 +122,7 @@ function compileFile(src, options = {}, data = {}) {
 	// Compile file.
 	return ejs.renderFile(src, data, data._ejs || {}, function (error, content) {
 		if (error) {
-			error.message = 'compiling ' + src + ' (' + error.message + ')';
+			error.message = '[' + src + '] ' + error.message;
 			throw error;
 		}
 

@@ -36,7 +36,9 @@ cli
 		});
 
 		// Attach src to options.
-		options.src = src || [];
+		if (src.length) {
+			options.src = src;
+		}
 
 		// Run archie the installer.
 		return archie.install(options).then(function () {
