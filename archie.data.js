@@ -14,7 +14,8 @@ data.project = {
 	description: 'Archie the architect is a customizable build tool and a task runner.',
 	version: (pkg && pkg.version) ? pkg.version : '0.0.1',
 	author: 'The Zimmee <thezimmee@gmail.com>',
-	homepage: 'https://github.com/thezimmee/archie'
+	homepage: 'https://github.com/thezimmee/archie',
+	license: 'MIT',
 };
 
 data.eslint = {
