@@ -29,7 +29,7 @@ describe('archie cli', function () {
 			var expectedContentFiles = ['test/fixtures/simple/package.json', 'test/fixtures/simple/.eslintrc.js', 'test/fixtures/simple/nested/test-file.md'];
 
 			// Run command.
-			var install = spawn('archie', ['i', 'examples/simple', '--data', 'test/fixtures/archie.data.js'], {stdio: 'inherit'});
+			var install = spawn('archie', ['i', 'examples/simple', '--data', 'test/fixtures/archie.js'], {stdio: 'inherit'});
 			install.on('close', function () {
 				// Expect each file to be same as file in .temp/
 				expectedFilepaths.forEach(function (filepath, n) {

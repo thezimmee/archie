@@ -29,9 +29,9 @@ describe('archie the installer', function () {
 			fs.removeSync('.test');
 		});
 
-		// Fail if archie.data.js doesn't exist
-		it('should throw an error, since no archie.data.js is found', function () {
-			var archieDataFilepath = 'archie.data.js';
+		// Fail if archie.js doesn't exist
+		it('should throw an error, since no archie.js is found', function () {
+			var archieDataFilepath = 'archie.js';
 			var archieTempDataFilepath = 'archie-testing.data.js';
 
 			// Temporarily move archie data file.
@@ -40,7 +40,7 @@ describe('archie the installer', function () {
 			// Run test.
 			expect(archie.install).to.throw();
 
-			// Move archie.data.js back.
+			// Move archie.js back.
 			fs.moveSync(archieTempDataFilepath, archieDataFilepath);
 		});
 
@@ -61,7 +61,7 @@ describe('archie the installer', function () {
 		}, {
 			// `archie install --data <path>`
 			options: {
-				data: 'archie.data.js',
+				data: 'archie.js',
 			},
 			expectedFiles: ['.temp/package.json', '.temp/.eslintrc.js', '.temp/nested/test-file.md'],
 			expectedContentFile: function (filepath) {
@@ -71,7 +71,7 @@ describe('archie the installer', function () {
 			// `archie install <src> --data <path>`
 			options: {
 				src: ['examples/simple/**/*'],
-				data: 'archie.data.js',
+				data: 'archie.js',
 			},
 			expectedFiles: ['.temp/package.json', '.temp/.eslintrc.js', '.temp/nested/test-file.md'],
 			expectedContentFile: function (filepath) {
@@ -81,7 +81,7 @@ describe('archie the installer', function () {
 			// Single file with custom archie data path.
 			options: {
 				src: ['examples/simple/nested/test-file.md'],
-				data: 'test/fixtures/archie.data.js',
+				data: 'test/fixtures/archie.js',
 				dest: '.test',
 				base: 'examples/simple'
 			},
@@ -93,7 +93,7 @@ describe('archie the installer', function () {
 			// Ignore files in nested.
 			options: {
 				src: ['examples/simple'],
-				data: 'test/fixtures/archie.data.js',
+				data: 'test/fixtures/archie.js',
 				dest: '.test',
 				base: 'examples/simple',
 				ignore: ['**/nested/*']
@@ -106,7 +106,7 @@ describe('archie the installer', function () {
 			// Ignore files in nested.
 			options: {
 				src: ['examples/simple'],
-				data: 'test/fixtures/archie.data.js',
+				data: 'test/fixtures/archie.js',
 				// profile: '_alt',
 				dest: '.test',
 				base: 'examples/simple',
@@ -121,7 +121,7 @@ describe('archie the installer', function () {
 			options: {
 				profile: '_archie',
 			},
-			expectedFiles: ['.coveralls.yml', '.eslintrc.js', '.gitignore', 'archie.sublime-project', 'package.json', 'README.md'],
+			expectedFiles: ['.eslintrc.js', '.gitignore', 'archie.sublime-project', 'package.json', 'README.md'],
 			expectedContentFile: function (filepath) {
 				return path.join('test/fixtures/archie', filepath);
 			}

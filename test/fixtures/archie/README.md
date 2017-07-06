@@ -19,12 +19,12 @@
 - [x] Feature: Archie the task master (`archie {cmd}`):
     - [x] When `{cmd}` in `archie {cmd}` is anything but another predefined archie command, pass the command and all arguments to `npm run {task}`.
 - [x] Feature: Add [test coverage](https://docs.codeclimate.com/docs/setting-up-test-coverage) and [other badges](https://github.com/dwyl/repo-badges) to readme ([coveralls.io](https://coveralls.io) or [codeclimate.com](https://codeclimate.com) or [nyc](https://libraries.io/npm/nyc)).
-- [x] Feature: Add following config options to archie.data._installer:
+- [x] Feature: Add following config options to archie._installer:
     - [x] `src`: Source files to install (makes `<src>` optional)
     - [x] `dest`: Destination directory.
     - [x] `ignore`: Files to not install / compile (useful for partial file includes).
     - [x] `merge`: JSON files to merge, not overwrite (useful for dynamic .json files, such as package.json).
-    - [x] `profile`: Sets configuration property; e.g., --profile=archie will set archie.data._archie as configuration object.
+    - [x] `profile`: Sets configuration property; e.g., --profile=archie will set archie._archie as configuration object.
 - [ ] Automate the project and release process:
     - [ ] Set up automated build & release process with semantic-release to do the following (see [here](https://hackernoon.com/automate-npm-releases-with-semantic-release-and-human-written-change-logs-2adb1dce487), [here](https://ciphertrick.com/2017/04/10/automate-package-publishing-nodejs-semantic-release/), and [here](https://oncletom.io/2016/npm-release/)):
         - [ ] Run automated builds and testing on a CI server ([CodeShip](https://codeship.com/features), [CodeFresh](https://codefresh.io/), or [TravisCI](travis-ci.com)).

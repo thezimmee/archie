@@ -50,7 +50,7 @@ describe('archie the runner', function () {
 		// Run it.
 		expect(archie.run.bind(archie, 'no-exist')).to.throw();
 
-		// Move archie.data.js back.
+		// Move archie.js back.
 		fs.moveSync(renamedPackageJson, originalPackageJson);
 	});
 });

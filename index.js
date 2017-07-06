@@ -27,7 +27,7 @@ function installBlock(options = {}) {
 	var promises = [];
 	var defaults = {
 		dest: process.cwd(),
-		data: 'archie.data.js',
+		data: 'archie.js',
 		profile: '_installer',
 		merge: ['**/*.json'],
 		ignore: [],
