@@ -26,6 +26,7 @@ function installBlock(options = {}) {
 	var glob = require('globby');
 	var promises = [];
 	var defaults = {
+		src: ['.archie/**/*'],
 		dest: process.cwd(),
 		data: 'archie.js',
 		profile: '_installer',
